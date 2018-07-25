@@ -1,1 +1,10 @@
 /* Stylesheet by Andrew Pittman, 2018 */
+
+.countries {
+    fill: #222;
+    stroke: #fff;
+  }
+  
+  .countries :hover {
+    fill: #8a8a8a;
+  }

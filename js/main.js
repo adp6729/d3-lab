@@ -1,47 +1,28 @@
-//initialize function called when the script loads
-function initialize(){
-    cities();
-};
+// main.js
+// author: Andrew Pittman
 
-//function to create a table with cities and their populations
-function cities(){
-    //define two arrays for cities and population
-    var cityPop = [
-        { 
-            city: 'Madison',
-            population: 233209
-        },
-        {
-            city: 'Milwaukee',
-            population: 594833
-        },
-        {
-            city: 'Green Bay',
-            population: 104057
-        },
-        {
-            city: 'Superior',
-            population: 27244
-        }
-    ];
+var width = 960,
+    height = 800;
 
-    //append the table element to the div
-    $("#mydiv").append("<table>");
+var path = d3.geo.path()
+    .projection(null);
 
-    //append a header row to the table
-    $("table").append("<tr>");
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
-    //add the "City" and "Population" columns to the header row
-    $("tr").append("<th>City</th><th>Population</th>");
+d3.json("data/africa.json", function(error, africa) {
+  if (error) throw error;
 
-    //loop to add a new row for each city
-    for (var i = 0; i < cityPop.length; i++){
-        //assign longer html strings to a variable
-        var rowHtml = "<tr><td>" + cityPop[i].city + "</td><td>" + cityPop[i].population + "</td></tr>";
-        //add the row's html string to the table
-        $("table").append(rowHtml);
-    };
-};
+  svg.append("g")
+      .attr("class","countries")
+    .selectAll("path")
+      .data(topojson.feature(africa, africa.objects.countries).features)
+    .enter().append("path")
+      .attr("d", path)
+    .append("title")
+      .text(function(d) { return d.properties.admin; });
 
-//call the initialize function when the document has loaded
-$(document).ready(initialize);
+});
+
+d3.select(self.frameElement).style("height", height + "px");
